@@ -1,0 +1,41 @@
+version: '3.4'
+
+services:
+  php:
+    build:
+      context: .
+      dockerfile: ./docker/php/Dockerfile
+    volumes:
+      - .:/var/www/html
+    networks:
+      - desafio
+  nginx:
+    build:
+      context: .
+      dockerfile: ./docker/nginx/Dockerfile
+    ports:
+      - 8000:80
+    volumes:
+      - .:/var/www/html
+    networks:
+      - desafio
+  db:
+    image: mariadb:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: "@Desafio123"
+      MYSQL_DATABASE: desafio
+      MYSQL_USER: lauanguermandi
+      MYSQL_PASSWORD: "@Desafio123"
+    ports:
+      - 3306:3306
+    volumes:
+      - dbdata
+    networks:
+      - desafio
+
+volumes:
+  dbdata:
+
+networks:
+  desafio:
+    driver: bridge
